@@ -1,0 +1,205 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body, #root {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  user-select: none;
+}
+
+/* Panel */
+.panel {
+  height: 26px;
+  background: #16213e;
+  border-bottom: 1px solid #0f3460;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-size: 11px;
+  z-index: 9999;
+  position: relative;
+}
+.panel-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: #a0a0a0;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+}
+.panel-btn:hover { border-color: #0f3460; color: #e0e0e0; }
+.panel-center { color: #888; }
+.panel-right { display: flex; gap: 8px; color: #666; }
+
+/* Desktop */
+.desktop {
+  position: absolute;
+  top: 26px; left: 0; right: 0; bottom: 0;
+  background: #1a1a2e;
+}
+
+/* Desktop icons */
+.icon-grid {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 64px;
+  padding: 6px 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.desktop-icon:hover { border-color: #0f3460; background: rgba(15,52,96,0.3); }
+.desktop-icon-label {
+  font-size: 10px;
+  color: #ccc;
+  margin-top: 4px;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Window */
+.window {
+  position: absolute;
+  background: #0f0f23;
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  min-height: 120px;
+}
+.window.focused { border-color: #0f3460; }
+.window-titlebar {
+  height: 22px;
+  background: #16213e;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  cursor: move;
+  flex-shrink: 0;
+}
+.window-titlebar.focused { background: #0f3460; }
+.window-title {
+  flex: 1;
+  font-size: 11px;
+  color: #aaa;
+  padding-left: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.window-title.focused { color: #fff; }
+.window-btns { display: flex; gap: 3px; }
+.window-btn {
+  width: 12px; height: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 8px;
+  line-height: 12px;
+  text-align: center;
+  color: #000;
+  font-weight: bold;
+}
+.window-btn.close { background: #e74c3c; }
+.window-btn.minimize { background: #f39c12; }
+.window-btn.maximize { background: #2ecc71; }
+.window-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Resize handle */
+.resize-handle {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 10px; height: 10px;
+  cursor: se-resize;
+}
+
+/* Menu dropdown */
+.menu-dropdown {
+  position: absolute;
+  top: 26px; left: 0;
+  background: #16213e;
+  border: 1px solid #333;
+  min-width: 160px;
+  z-index: 99999;
+}
+.menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #ccc;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+}
+.menu-item:hover { background: #0f3460; color: #fff; }
+.menu-sep { border-top: 1px solid #333; margin: 2px 0; }
+
+/* Terminal */
+.terminal-container { width: 100%; height: 100%; background: #0a0a1a; }
+.xterm { padding: 4px; }
+.xterm-viewport { overflow-y: auto !important; }
+
+/* File viewer */
+.file-viewer { display: flex; width: 100%; height: 100%; }
+.file-sidebar {
+  width: 160px;
+  background: #16213e;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.file-sidebar-header {
+  padding: 4px 8px;
+  font-size: 10px;
+  color: #666;
+  border-bottom: 1px solid #333;
+}
+.file-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #ccc;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+}
+.file-item:hover { background: #0f3460; }
+.file-item.selected { background: #0f3460; color: #fff; }
+.file-item.dir { color: #3498db; }
+.file-content {
+  flex: 1;
+  padding: 8px;
+  overflow: auto;
+  font-size: 11px;
+  color: #ccc;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #0f0f23; }
+::-webkit-scrollbar-thumb { background: #333; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
