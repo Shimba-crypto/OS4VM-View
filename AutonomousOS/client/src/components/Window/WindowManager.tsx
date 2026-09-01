@@ -9,6 +9,7 @@ import MonitorApp from '../Apps/Monitor/MonitorApp';
 import AgentConsole from '../Apps/Monitor/AgentConsole';
 import SettingsApp from '../Apps/Settings/SettingsApp';
 import DBViewerApp from '../Apps/DBViewer/DBViewerApp';
+import TimeTrackerApp from '../Apps/TimeTracker/TimeTrackerApp';
 
 const comps: Record<string, React.ComponentType<{ windowId: string }>> = {
   Terminal: TerminalApp,
@@ -18,6 +19,7 @@ const comps: Record<string, React.ComponentType<{ windowId: string }>> = {
   AgentConsole: AgentConsole,
   Settings: SettingsApp,
   DBViewer: DBViewerApp,
+  TimeTracker: TimeTrackerApp,
 };
 
 function WpmWrapper({ entry, baseUrl, windowId }: { entry: string; baseUrl: string; windowId: string }) {

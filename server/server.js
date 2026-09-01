@@ -110,16 +110,44 @@ try {
   Database = null;
 }
 
+const DB_TTL_MS = 2 * 60 * 60 * 1000; // 2 hrs per spec, track time always
+const dbMeta = new Map(); // key -> { createdAt, lastAccess }
+const instanceStart = new Map(); // instanceId -> start timestamp
+
+function trackInstance(instanceId) {
+  if (!instanceStart.has(instanceId)) instanceStart.set(instanceId, Date.now());
+  return instanceStart.get(instanceId);
+}
+
 const dbCache = new Map();
 
 function getDB(instanceId, appId, dbName) {
   const key = `${instanceId}:${appId}:${dbName}`;
-  if (dbCache.has(key)) return dbCache.get(key);
+  trackInstance(instanceId);
+  // Check TTL expiry on access
+  const meta = dbMeta.get(key);
+  if (meta && Date.now() - meta.createdAt > DB_TTL_MS) {
+    const p = getAppDbPath(instanceId, appId, dbName);
+    try { const db = dbCache.get(key); if (db && !db._isMock) db.close(); } catch {}
+    dbCache.delete(key);
+    dbMeta.delete(key);
+    try { fs.unlinkSync(p); } catch {}
+    try { fs.unlinkSync(p + '.json'); } catch {}
+    try { fs.unlinkSync(p + '-wal'); } catch {}
+    try { fs.unlinkSync(p + '-shm'); } catch {}
+    throw new Error(`DB ${appId}/${dbName} expired after 2 hours (per-app SandBox-DB timeout) — recreate with open`);
+  }
+  if (dbCache.has(key)) {
+    const m = dbMeta.get(key);
+    if (m) m.lastAccess = Date.now();
+    return dbCache.get(key);
+  }
   const dbPath = getAppDbPath(instanceId, appId, dbName);
   if (Database) {
     const db = new Database(dbPath);
     db.pragma('journal_mode = WAL');
     dbCache.set(key, db);
+    dbMeta.set(key, { createdAt: Date.now(), lastAccess: Date.now() });
     return db;
   }
   // Fallback JSON mock

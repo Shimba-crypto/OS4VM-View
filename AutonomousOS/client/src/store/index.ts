@@ -11,6 +11,7 @@ export const defaultApps: AppDefinition[] = [
   { id: 'agent', name: 'Agent Console', icon: '⬡', defaultWidth: 560, defaultHeight: 520, minWidth: 400, minHeight: 380, component: 'AgentConsole', category: 'Autonomy', description: 'Agent queue & history' },
   { id: 'settings', name: 'Settings', icon: '⬔', defaultWidth: 760, defaultHeight: 500, minWidth: 500, minHeight: 380, component: 'Settings', category: 'System', description: 'Autonomy controls' },
   { id: 'db-viewer', name: 'DB Viewer', icon: '🗄️', defaultWidth: 720, defaultHeight: 500, minWidth: 500, minHeight: 400, component: 'DBViewer', category: 'System', description: 'Sandboxed SQLite per-app' },
+  { id: 'time-tracker', name: 'Time Tracker', icon: '⏱️', defaultWidth: 500, defaultHeight: 400, component: 'TimeTracker', category: 'Accessories', description: 'Track time per task' },
 ];
 
 interface WindowStore {

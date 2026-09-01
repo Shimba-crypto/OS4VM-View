@@ -12,16 +12,18 @@ echo "Building all prod dists..."
 (cd "$OS_ROOT/NanoOS/client" && npm run build)
 (cd "$OS_ROOT/Bindows/client" && npm run build)
 (cd "$OS_ROOT/AutonomousOS/client" && npm run build)
+(cd "$OS_ROOT/WebXOS/client" && npm run build)
 (cd "$ROOT" && npm run build)
 
 echo "Assembling $OUT/..."
 rm -rf "$ROOT/$OUT"
-mkdir -p "$ROOT/$OUT/backend-os" "$ROOT/$OUT/simple-os" "$ROOT/$OUT/nano-os" "$ROOT/$OUT/bindows" "$ROOT/$OUT/autonomous" "$ROOT/$OUT/luncher"
+mkdir -p "$ROOT/$OUT/backend-os" "$ROOT/$OUT/simple-os" "$ROOT/$OUT/nano-os" "$ROOT/$OUT/bindows" "$ROOT/$OUT/autonomous" "$ROOT/$OUT/web-xos" "$ROOT/$OUT/luncher"
 cp -r "$OS_ROOT/BackendOS/client/dist"/* "$ROOT/$OUT/backend-os/"
 cp -r "$OS_ROOT/SimpleOS/client/dist"/* "$ROOT/$OUT/simple-os/"
 cp -r "$OS_ROOT/NanoOS/client/dist"/* "$ROOT/$OUT/nano-os/"
 cp -r "$OS_ROOT/Bindows/client/dist"/* "$ROOT/$OUT/bindows/"
 cp -r "$OS_ROOT/AutonomousOS/client/dist"/* "$ROOT/$OUT/autonomous/"
+cp -r "$OS_ROOT/WebXOS/client/dist"/* "$ROOT/$OUT/web-xos/"
 cp -r "$ROOT/dist"/* "$ROOT/$OUT/"
 cp -r "$ROOT/dist"/* "$ROOT/$OUT/luncher/"
 

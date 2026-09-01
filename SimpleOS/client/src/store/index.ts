@@ -9,6 +9,7 @@ const defaultApps: AppDefinition[] = [
   { id: 'calculator', name: 'Calculator', icon: '🔢', desktopIcon: '🔢', defaultWidth: 260, defaultHeight: 370, minWidth: 240, minHeight: 350, component: 'Calculator' },
   { id: 'system-info', name: 'System Info', icon: '📊', desktopIcon: '📊', defaultWidth: 420, defaultHeight: 380, component: 'SystemInfo' },
   { id: 'db-viewer', name: 'DB Viewer', icon: '🗄️', desktopIcon: '🗄️', defaultWidth: 700, defaultHeight: 480, minWidth: 500, minHeight: 350, component: 'DBViewer' },
+  { id: 'time-tracker', name: 'Time Tracker', icon: '⏱️', desktopIcon: '⏱️', defaultWidth: 500, defaultHeight: 400, component: 'TimeTracker' },
 ];
 
 interface WindowStore {

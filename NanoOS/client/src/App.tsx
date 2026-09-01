@@ -4,11 +4,13 @@ import { useAppRegistry, loadWpmComponent } from './store/appRegistry';
 import TerminalApp from './components/Apps/Terminal';
 import FileViewer from './components/Apps/FileViewer';
 import DBViewerApp from './components/Apps/DBViewer/DBViewerApp';
+import TimeTrackerApp from './components/Apps/TimeTracker/TimeTrackerApp';
 
 const APP_COMP: Record<string, React.FC<any>> = {
   terminal: TerminalApp,
   files: FileViewer,
   'db-viewer': DBViewerApp as any,
+  'time-tracker': TimeTrackerApp as any,
 };
 
 function WpmWrapper({ entry, baseUrl, winId }: { entry: string; baseUrl: string; winId: string }) {

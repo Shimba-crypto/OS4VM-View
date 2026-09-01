@@ -11,6 +11,7 @@ import CalculatorApp from '../Apps/Calculator/CalculatorApp';
 import AppStoreApp from '../Apps/AppStore/AppStoreApp';
 import DBViewerApp from '../Apps/DBViewer/DBViewerApp';
 import BrowserApp from '../Apps/Browser/BrowserApp';
+import TimeTrackerApp from '../Apps/TimeTracker/TimeTrackerApp';
 
 const appComponents: Record<string, React.ComponentType<{ windowId: string }>> = {
   Terminal: TerminalApp,
@@ -22,6 +23,7 @@ const appComponents: Record<string, React.ComponentType<{ windowId: string }>> =
   AppStore: AppStoreApp,
   Browser: BrowserApp,
   DBViewer: DBViewerApp,
+  TimeTracker: TimeTrackerApp,
 };
 
 function WpmWrapper({ entry, baseUrl, windowId }: { entry: string; baseUrl: string; windowId: string }) {

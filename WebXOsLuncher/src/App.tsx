@@ -21,6 +21,7 @@ const OSES: OSDef[] = [
   { id: 'bindows', name: 'Bindows 11', longName: 'Bindows 11', icon: '🪟', desc: 'Windows 11 Fluent · new', color: 'from-sky-600 to-blue-600', port: 5177, basePath: 'bindows/', localPath: 'http://localhost:5177/', features: ['Start Menu', 'File Explorer', 'Notepad + Calculator', 'Edge browser'] },
   { id: 'simpleos', name: 'SimpleOS', longName: 'SimpleOS', icon: '⚡', desc: 'XFCE-style lightweight', color: 'from-emerald-600 to-teal-600', port: 5175, basePath: 'simple-os/', localPath: 'http://localhost:5175/', features: ['Top + Bottom panels', '5 apps', 'Lightweight'] },
   { id: 'nanoos', name: 'NanoOS', longName: 'NanoOS', icon: '◆', desc: 'Ultra-light monochrome', color: 'from-zinc-700 to-zinc-900', port: 5176, basePath: 'nano-os/', localPath: 'http://localhost:5176/', features: ['Terminal only', '2 apps', '~12KB CSS'] },
+  { id: 'webxos', name: 'WebXOS', longName: 'WebXOS', icon: '🌐', desc: 'ChromeOS-style web-first OS · new', color: 'from-sky-500 to-cyan-500', port: 5180, basePath: 'web-xos/', localPath: 'http://localhost:5180/', features: ['ChromeOS shelf', '9 apps', 'wpm + TimeTracker'] },
 ];
 
 type Health = Record<string, 'online' | 'offline' | 'checking'>;
@@ -178,10 +179,10 @@ export default function App() {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-sm">⧉</div>
           <div>
             <div className="text-[14px] font-bold leading-none tracking-tight">WebXOs Luncher</div>
-            <div className="text-[11px] text-zinc-500 leading-none mt-0.5">Run OS 1 — <span className="text-violet-400 font-medium">BackendOS</span> + 3 more</div>
+            <div className="text-[11px] text-zinc-500 leading-none mt-0.5">Run OS 1 — <span className="text-violet-400 font-medium">BackendOS</span> + 4 more</div>
           </div>
           <span className="ml-3 hidden md:inline-flex items-center gap-1.5 text-[10px] font-medium px-2 py-1 rounded-full bg-violet-600/15 text-violet-300 border border-violet-600/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> 5 OSes
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> 6 OSes
           </span>
           <span className="hidden lg:inline-flex items-center gap-1 text-[10px] font-mono px-2 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-500">
             <Activity className="w-3 h-3" /> {Object.values(health).filter((v) => v === 'online').length}/{OSES.length} dev online
@@ -351,7 +352,7 @@ export default function App() {
 
             <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950 p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
               <div className="flex items-center gap-3"><div className="w-8 h-8 rounded-full bg-amber-500/15 border border-amber-500/20 flex items-center justify-center"><Zap className="w-4 h-4 text-amber-400" /></div><div><div className="text-[12px] font-semibold">Dev tip</div><div className="text-[11px] text-zinc-500">Run <code className="bg-zinc-900 px-1 py-0.5 rounded">npm run dev</code> in each OS client, then use launcher on :5179.</div></div></div>
-              <div className="text-[11px] text-zinc-600 font-mono">OS4VM-View · 5 OSes · AutonomousOS new</div>
+              <div className="text-[11px] text-zinc-600 font-mono">OS4VM-View · 6 OSes · WebXOS new</div>
             </div>
           </div>
         </div>

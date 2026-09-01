@@ -54,6 +54,12 @@ jobs:
           npm install
           npm run build
 
+      - name: Build WebXOS
+        working-directory: WebXOS/client
+        run: |
+          npm install
+          npm run build
+
       - name: Build WebXOs Luncher
         working-directory: WebXOsLuncher
         run: |
@@ -67,11 +73,13 @@ jobs:
           mkdir -p _site/nano-os
           mkdir -p _site/bindows
           mkdir -p _site/autonomous
+          mkdir -p _site/web-xos
           cp -r BackendOS/client/dist/* _site/backend-os/
           cp -r SimpleOS/client/dist/* _site/simple-os/
           cp -r NanoOS/client/dist/* _site/nano-os/
           cp -r Bindows/client/dist/* _site/bindows/
           cp -r AutonomousOS/client/dist/* _site/autonomous/
+          cp -r WebXOS/client/dist/* _site/web-xos/
           # Luncher becomes the site root (replaces old static index.html, but keep fallback)
           cp -r WebXOsLuncher/dist/* _site/
           # Also keep copy at /luncher for direct access

@@ -11,6 +11,7 @@ import SettingsApp from '../Apps/Settings/SettingsApp';
 import StoreApp from '../Apps/Settings/StoreApp';
 import PhotosApp from '../Apps/Settings/PhotosApp';
 import DBViewerApp from '../Apps/DBViewer/DBViewerApp';
+import TimeTrackerApp from '../Apps/TimeTracker/TimeTrackerApp';
 
 const appComponents: Record<string, React.ComponentType<{ windowId: string }>> = {
   FileExplorer: FileExplorerApp,
@@ -22,6 +23,7 @@ const appComponents: Record<string, React.ComponentType<{ windowId: string }>> =
   Store: StoreApp,
   Photos: PhotosApp,
   DBViewer: DBViewerApp,
+  TimeTracker: TimeTrackerApp,
 };
 
 function WpmWrapper({ entry, baseUrl, windowId }: { entry: string; baseUrl: string; windowId: string }) {
