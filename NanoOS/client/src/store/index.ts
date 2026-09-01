@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useAppRegistry } from './appRegistry';
 
 export interface WinState {
   id: string;
@@ -49,7 +50,9 @@ export const useStore = create<Store>((set, get) => ({
   nextZ: 100,
 
   open: (appId) => {
-    const app = APPS.find((a) => a.id === appId);
+    const installed = useAppRegistry.getState().installed as any;
+    const allApps = [...APPS, ...installed];
+    const app = allApps.find((a: any) => a.id === appId);
     if (!app) return;
     const existing = get().windows.find((w) => w.appId === appId && !w.minimized);
     if (existing) { get().focus(existing.id); return; }
@@ -64,8 +67,10 @@ export const useStore = create<Store>((set, get) => ({
         appId: app.id,
         title: app.name,
         x: 60 + off, y: 20 + off,
-        w: app.w, h: app.h,
-        minW: app.minW, minH: app.minH,
+        w: (app as any).w || (app as any).defaultWidth || 500,
+        h: (app as any).h || (app as any).defaultHeight || 380,
+        minW: (app as any).minW || (app as any).minWidth || 300,
+        minH: (app as any).minH || (app as any).minHeight || 200,
         minimized: false, maximized: false, focused: true, z: s.nextZ,
       }),
       nextZ: s.nextZ + 1,

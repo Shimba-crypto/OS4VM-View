@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore, APPS } from './store';
+import { useAppRegistry, loadWpmComponent } from './store/appRegistry';
 import TerminalApp from './components/Apps/Terminal';
 import FileViewer from './components/Apps/FileViewer';
 
@@ -8,7 +9,20 @@ const APP_COMP: Record<string, React.FC<{ winId: string }>> = {
   files: FileViewer,
 };
 
+function WpmWrapper({ entry, baseUrl, winId }: { entry: string; baseUrl: string; winId: string }) {
+  const [Comp, setComp] = useState<React.ComponentType<{ winId: string }> | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  useEffect(() => {
+    loadWpmComponent(entry, baseUrl).then(setComp as any).catch((e) => setErr(String(e)));
+  }, [entry, baseUrl]);
+  if (err) return <div style={{ padding: 8, color: '#f55' }}>Failed: {err}</div>;
+  if (!Comp) return <div style={{ padding: 8, color: '#666' }}>Loading...</div>;
+  return <Comp winId={winId} />;
+}
+
 export default function App() {
+  const installed = useAppRegistry((s) => s.installed);
+  const allApps = [...APPS, ...installed as any];
   const { windows, open, focus, minimize, restore } = useStore();
   const [time, setTime] = useState(new Date());
   const [menu, setMenu] = useState(false);
@@ -26,7 +40,6 @@ export default function App() {
 
   return (
     <>
-      {/* Panel */}
       <div className="panel">
         <button className="panel-btn" onClick={(e) => { e.stopPropagation(); setMenu(!menu); }}>
           [ apps ]
@@ -48,10 +61,9 @@ export default function App() {
           ))}
         </div>
 
-        {/* Menu dropdown */}
         {menu && (
           <div className="menu-dropdown" onClick={(e) => e.stopPropagation()}>
-            {APPS.map((app) => (
+            {allApps.map((app) => (
               <button key={app.id} className="menu-item" onClick={() => { open(app.id); setMenu(false); }}>
                 {app.icon} {app.name}
               </button>
@@ -62,11 +74,9 @@ export default function App() {
         )}
       </div>
 
-      {/* Desktop */}
       <div className="desktop">
-        {/* Desktop icons */}
         <div className="icon-grid">
-          {APPS.map((app) => (
+          {allApps.map((app) => (
             <div key={app.id} className="desktop-icon" onDoubleClick={() => open(app.id)}>
               <span style={{ fontSize: 20 }}>{app.icon}</span>
               <span className="desktop-icon-label">{app.name}</span>
@@ -74,10 +84,21 @@ export default function App() {
           ))}
         </div>
 
-        {/* Windows */}
         {windows.map((w) => {
-          const Comp = APP_COMP[w.appId];
-          return w.minimized ? null : (
+          const installedMap = Object.fromEntries(installed.map((a: any) => [a.id, a]));
+          const isWpm = !!installedMap[w.appId];
+          const wpmEntry = isWpm ? (installedMap[w.appId] as any).entry : null;
+          const wpmBase = isWpm ? ((installedMap[w.appId] as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8080/catalog.json') : null;
+          const Comp = APP_COMP[w.appId] as any;
+          if (w.minimized) return null;
+          if (isWpm) {
+            return (
+              <Window key={w.id} win={w}>
+                <WpmWrapper entry={wpmEntry} baseUrl={wpmBase} winId={w.id} />
+              </Window>
+            );
+          }
+          return (
             <Window key={w.id} win={w}>
               {Comp ? <Comp winId={w.id} /> : <div style={{ padding: 8, color: '#666' }}>?</div>}
             </Window>

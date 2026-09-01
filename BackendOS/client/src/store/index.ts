@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useAppRegistry } from './appRegistry';
 import type { WindowState, AppDefinition, DesktopSettings } from '../types';
 
 const defaultApps: AppDefinition[] = [
@@ -30,7 +31,9 @@ export const useWindowStore = create<WindowStore>((set, get) => ({
   nextZIndex: 100,
 
   openApp: (appId) => {
-    const app = defaultApps.find((a) => a.id === appId);
+    const installed = useAppRegistry.getState().installed;
+    const allApps = [...defaultApps, ...installed];
+    const app = allApps.find((a) => a.id === appId);
     if (!app) return;
 
     // Check if already open — focus it

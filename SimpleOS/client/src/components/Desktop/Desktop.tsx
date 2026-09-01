@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useWindowStore, defaultApps } from '../../store';
+import { useAppRegistry } from '../../store/appRegistry';
 import TopPanel from '../Panel/TopPanel';
 import BottomPanel from '../Panel/BottomPanel';
 import WindowManager from '../Window/WindowManager';
 
 export default function Desktop() {
+  const installed = useAppRegistry((s) => s.installed);
   const { openApp } = useWindowStore();
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
@@ -36,7 +38,7 @@ export default function Desktop() {
       <div className="flex-1 relative overflow-hidden">
         {/* Desktop icons */}
         <div className="absolute inset-4 grid grid-cols-1 gap-2 content-start">
-          {defaultApps.map((app) => (
+          {[...defaultApps, ...installed].map((app) => (
             <button
               key={app.id}
               onDoubleClick={() => handleDesktopDoubleClick(app.id)}

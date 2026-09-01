@@ -3,6 +3,7 @@ import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
 import { api } from '../../store/api';
+import { handleWpm } from '../../lib/wpm';
 
 export default function TerminalApp({ winId }: { winId: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -104,6 +105,13 @@ export default function TerminalApp({ winId }: { winId: string }) {
       case 'whoami': t.writeln('  user@nanoos'); prompt(t); break;
       case 'clear': t.clear(); prompt(t); break;
       case 'uname': t.writeln('  NanoOS 0.1.0 (Web)'); prompt(t); break;
+      case 'wpm':
+      case 'weblinux':
+      case 'wxpm':
+        await handleWpm(args, t);
+        prompt(t);
+        break;
+
       default: t.writeln(`  ${c}: not found`); prompt(t);
     }
   }

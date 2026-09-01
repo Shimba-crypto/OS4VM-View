@@ -3,6 +3,7 @@ import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
 import { api } from '../../../store/api';
+import { handleWpm } from '../../../lib/wpm';
 
 interface TerminalAppProps {
   windowId: string;
@@ -146,6 +147,13 @@ export default function TerminalApp({ windowId }: TerminalAppProps) {
       case 'whoami': term.writeln('  user@simpleos'); writePrompt(term); break;
       case 'clear': term.clear(); writePrompt(term); break;
       case 'uname': term.writeln('  SimpleOS 0.1.0 (Web)'); writePrompt(term); break;
+      case 'wpm':
+      case 'weblinux':
+      case 'wxpm':
+        await handleWpm(args, term);
+        writePrompt(term);
+        break;
+
       default: term.writeln(`  ${command}: command not found`); writePrompt(term);
     }
   }

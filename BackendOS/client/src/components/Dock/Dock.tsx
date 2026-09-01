@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useWindowStore, defaultApps } from '../../store';
+import { useAppRegistry } from '../../store/appRegistry';
 
 export default function Dock() {
   const { windows, openApp, focusWindow, restoreWindow } = useWindowStore();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const dockApps = defaultApps.slice(0, 7);
+  const installed = useAppRegistry((s) => s.installed);
+  const dockApps = [...defaultApps, ...installed].slice(0, 9);
 
   function handleAppClick(appId: string) {
     const existing = windows.find((w) => w.appId === appId);

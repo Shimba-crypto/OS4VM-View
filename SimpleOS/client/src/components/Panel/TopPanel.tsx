@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useWindowStore } from '../../store';
+import { useWindowStore, defaultApps } from '../../store';
+import { useAppRegistry } from '../../store/appRegistry';
 import { Menu, Wifi, Volume2, Battery } from 'lucide-react';
 
 export default function TopPanel() {
@@ -29,13 +30,10 @@ export default function TopPanel() {
         {showMenu && (
           <div className="absolute top-8 left-0 bg-white border border-gray-400 shadow-lg min-w-[200px] z-[99999]">
             <div className="py-1">
-              {[
-                { name: 'Terminal', icon: '>', app: 'terminal' },
-                { name: 'File Manager', icon: '📁', app: 'file-manager' },
-                { name: 'Text Editor', icon: '📝', app: 'text-editor' },
-                { name: 'Calculator', icon: '🔢', app: 'calculator' },
-                { name: 'System Info', icon: '📊', app: 'system-info' },
-              ].map((item) => (
+              {[...defaultApps, ...useAppRegistry.getState().installed].map((item) => (
+                // Map AppDefinition to menu item shape
+                { name: item.name, icon: item.icon, app: item.id } as any
+              )).slice(0, 8).map((item) => (
                 <button
                   key={item.app}
                   onClick={() => {

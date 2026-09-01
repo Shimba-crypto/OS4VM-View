@@ -4,6 +4,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
 import { api } from '../../../store/api';
+import { handleWpm } from '../../../lib/wpm';
 
 interface TerminalAppProps {
   windowId: string;
@@ -244,6 +245,13 @@ export default function TerminalApp({ windowId }: TerminalAppProps) {
         term.writeln('\x1b[1;38;5;89m      │   ╰──────╯  │\x1b[0m   \x1b[38;5;89mKernel:\x1b[0m Web Runtime');
         term.writeln('\x1b[1;38;5;89m       ╲            ╱\x1b[0m    \x1b[38;5;89mShell:\x1b[0m BackendOS Terminal');
         term.writeln('\x1b[1;38;5;89m        ╰──────────╯\x1b[0m     \x1b[38;5;89mTheme:\x1b[0m Catppuccin Mocha');
+        writePrompt(term);
+        break;
+
+      case 'wpm':
+      case 'weblinux':
+      case 'wxpm':
+        await handleWpm(args, term);
         writePrompt(term);
         break;
 
