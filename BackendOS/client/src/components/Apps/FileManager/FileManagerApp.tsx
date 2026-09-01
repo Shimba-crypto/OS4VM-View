@@ -3,7 +3,7 @@ import {
   FolderOpen, File, FileText, ChevronRight, ChevronDown,
   Plus, Trash2, FolderPlus, Home, ArrowLeft, RefreshCw
 } from 'lucide-react';
-import { api } from '../../store/api';
+import { api } from '../../../store/api';
 
 interface FileManagerAppProps {
   windowId: string;

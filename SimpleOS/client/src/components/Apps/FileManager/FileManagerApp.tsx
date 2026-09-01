@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FolderOpen, File, ChevronRight, ChevronDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
-import { api } from '../../store/api';
+import { api } from '../../../store/api';
 
 interface FileManagerAppProps {
   windowId: string;

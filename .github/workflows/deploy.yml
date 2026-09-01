@@ -1,0 +1,113 @@
+name: Deploy OS Clients to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build BackendOS
+        working-directory: BackendOS/client
+        run: |
+          npm install
+          npm run build
+
+      - name: Build SimpleOS
+        working-directory: SimpleOS/client
+        run: |
+          npm install
+          npm run build
+
+      - name: Build NanoOS
+        working-directory: NanoOS/client
+        run: |
+          npm install
+          npm run build
+
+      - name: Assemble Pages
+        run: |
+          mkdir -p _site/backend-os
+          mkdir -p _site/simple-os
+          mkdir -p _site/nano-os
+          cp -r BackendOS/client/dist/* _site/backend-os/
+          cp -r SimpleOS/client/dist/* _site/simple-os/
+          cp -r NanoOS/client/dist/* _site/nano-os/
+
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>OS4VM-View</title>
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e4e4e7; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+              .container { text-align: center; max-width: 640px; padding: 2rem; }
+              h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+              p { color: #a1a1aa; margin-bottom: 2rem; }
+              .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+              .card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 1.5rem; text-decoration: none; color: inherit; transition: border-color 0.2s; }
+              .card:hover { border-color: #6366f1; }
+              .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+              .name { font-weight: 600; margin-bottom: 0.25rem; }
+              .desc { font-size: 0.8rem; color: #71717a; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>OS4VM-View</h1>
+              <p>Browser-based virtual operating systems</p>
+              <div class="grid">
+                <a class="card" href="./backend-os/">
+                  <div class="icon">&#x1f5a5;&#xfe0f;</div>
+                  <div class="name">BackendOS</div>
+                  <div class="desc">macOS-style developer OS</div>
+                </a>
+                <a class="card" href="./simple-os/">
+                  <div class="icon">&#x26a1;</div>
+                  <div class="name">SimpleOS</div>
+                  <div class="desc">Lightweight XFCE-style OS</div>
+                </a>
+                <a class="card" href="./nano-os/">
+                  <div class="icon">&#x1f539;</div>
+                  <div class="name">NanoOS</div>
+                  <div class="desc">Ultra-light terminal OS</div>
+                </a>
+              </div>
+            </div>
+          </body>
+          </html>
+          EOF
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

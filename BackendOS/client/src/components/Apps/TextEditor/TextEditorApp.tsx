@@ -8,7 +8,7 @@ import { python } from '@codemirror/lang-python';
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
 import { json } from '@codemirror/lang-json';
-import { api } from '../../store/api';
+import { api } from '../../../store/api';
 import { Save, FileText } from 'lucide-react';
 
 interface TextEditorAppProps {
@@ -46,7 +46,7 @@ export default function TextEditorApp({ windowId }: TextEditorAppProps) {
         highlightActiveLine(),
         bracketMatching(),
         syntaxHighlighting(defaultHighlightStyle),
-        keymap.of([...defaultKeymap, ...historyKeymap]),
+        keymap.of([...defaultKeymap, ...historyKeymap] as any),
         getLanguage(filePath),
         EditorView.updateListener.of((update) => {
           if (update.docChanged) setSaved(false);
@@ -70,7 +70,7 @@ export default function TextEditorApp({ windowId }: TextEditorAppProps) {
 
     viewRef.current = view;
 
-    return () => view.dispose();
+    return () => { view.destroy(); };
   }, []);
 
   async function loadFile() {

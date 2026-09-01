@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Save, FileText } from 'lucide-react';
-import { api } from '../../store/api';
+import { api } from '../../../store/api';
 
 interface TextEditorAppProps {
   windowId: string;

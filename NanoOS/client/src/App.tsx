@@ -75,11 +75,14 @@ export default function App() {
         </div>
 
         {/* Windows */}
-        {windows.map((w) => w.minimized ? null : (
-          <Window key={w.id} win={w}>
-            {APP_COMP[w.appId] ? <APP_COMP[w.appId] winId={w.id} /> : <div style={{ padding: 8, color: '#666' }}>?</div>}
-          </Window>
-        ))}
+        {windows.map((w) => {
+          const Comp = APP_COMP[w.appId];
+          return w.minimized ? null : (
+            <Window key={w.id} win={w}>
+              {Comp ? <Comp winId={w.id} /> : <div style={{ padding: 8, color: '#666' }}>?</div>}
+            </Window>
+          );
+        })}
       </div>
     </>
   );
