@@ -14,12 +14,13 @@ type OSDef = {
   features: string[];
 };
 
+const GH_PAGES_BASE = 'https://shimba-crypto.github.io/OS4VM-View';
 const OSES: OSDef[] = [
-  { id: 'backendos', name: 'BackendOS', longName: 'OS 1 — BackendOS', icon: '🖥️', desc: 'macOS-style developer OS · most complete', color: 'from-violet-600 to-indigo-600', port: 5174, basePath: '/os/backend/', localPath: 'http://localhost:5174/os/backend/', features: ['Terminal + xterm', 'CodeMirror editor', 'Dock + Taskbar', '8 apps'] },
-  { id: 'autonomous', name: 'AutonomousOS', longName: 'AutonomousOS', icon: '◉', desc: 'Agent-driven · auto-tile + queue', color: 'from-cyan-600 to-teal-600', port: 5178, basePath: '/os/autonomous/', localPath: 'http://localhost:5178/os/autonomous/', features: ['Agent Bar', 'Auto-tile', 'Task Monitor', '6 apps'] },
-  { id: 'bindows', name: 'Bindows 11', longName: 'Bindows 11', icon: '🪟', desc: 'Windows 11 Fluent · new', color: 'from-sky-600 to-blue-600', port: 5177, basePath: '/os/bindows/', localPath: 'http://localhost:5177/os/bindows/', features: ['Start Menu', 'File Explorer', 'Notepad + Calculator', 'Edge browser'] },
-  { id: 'simpleos', name: 'SimpleOS', longName: 'SimpleOS', icon: '⚡', desc: 'XFCE-style lightweight', color: 'from-emerald-600 to-teal-600', port: 5175, basePath: '/os/simple/', localPath: 'http://localhost:5175/os/simple/', features: ['Top + Bottom panels', '5 apps', 'Lightweight'] },
-  { id: 'nanoos', name: 'NanoOS', longName: 'NanoOS', icon: '◆', desc: 'Ultra-light monochrome', color: 'from-zinc-700 to-zinc-900', port: 5176, basePath: '/os/nano/', localPath: 'http://localhost:5176/os/nano/', features: ['Terminal only', '2 apps', '~12KB CSS'] },
+  { id: 'backendos', name: 'BackendOS', longName: 'OS 1 — BackendOS', icon: '🖥️', desc: 'macOS-style developer OS · most complete', color: 'from-violet-600 to-indigo-600', port: 5174, basePath: 'backend-os/', localPath: 'http://localhost:5174/', features: ['Terminal + xterm', 'CodeMirror editor', 'Dock + Taskbar', '8 apps'] },
+  { id: 'autonomous', name: 'AutonomousOS', longName: 'AutonomousOS', icon: '◉', desc: 'Agent-driven · auto-tile + queue', color: 'from-cyan-600 to-teal-600', port: 5178, basePath: 'autonomous/', localPath: 'http://localhost:5178/', features: ['Agent Bar', 'Auto-tile', 'Task Monitor', '6 apps'] },
+  { id: 'bindows', name: 'Bindows 11', longName: 'Bindows 11', icon: '🪟', desc: 'Windows 11 Fluent · new', color: 'from-sky-600 to-blue-600', port: 5177, basePath: 'bindows/', localPath: 'http://localhost:5177/', features: ['Start Menu', 'File Explorer', 'Notepad + Calculator', 'Edge browser'] },
+  { id: 'simpleos', name: 'SimpleOS', longName: 'SimpleOS', icon: '⚡', desc: 'XFCE-style lightweight', color: 'from-emerald-600 to-teal-600', port: 5175, basePath: 'simple-os/', localPath: 'http://localhost:5175/', features: ['Top + Bottom panels', '5 apps', 'Lightweight'] },
+  { id: 'nanoos', name: 'NanoOS', longName: 'NanoOS', icon: '◆', desc: 'Ultra-light monochrome', color: 'from-zinc-700 to-zinc-900', port: 5176, basePath: 'nano-os/', localPath: 'http://localhost:5176/', features: ['Terminal only', '2 apps', '~12KB CSS'] },
 ];
 
 type Health = Record<string, 'online' | 'offline' | 'checking'>;
@@ -131,10 +132,14 @@ export default function App() {
   const filtered = OSES.filter((o) => `${o.name} ${o.desc}`.toLowerCase().includes(search.toLowerCase()));
 
   function getOSUrl(os: OSDef) {
-    const isLocalhost = window.location.hostname === 'localhost';
+    const host = window.location.hostname;
+    const isLocalhost = host === 'localhost' || host === '127.0.0.1';
+    const isVercel = host.includes('vercel.app');
     const useLocal = envMode === 'local' || (envMode === 'auto' && isLocalhost);
-    // If health says offline and we are in auto, fallback to prod relative
-    const base = useLocal ? os.localPath : `.${os.basePath}`;
+    let base: string;
+    if (useLocal) base = os.localPath;
+    else if (isVercel) base = `${GH_PAGES_BASE}/${os.basePath}`;
+    else base = `./${os.basePath}`;
     if (instanceId) return `${base}${instanceId}`;
     return base;
   }

@@ -3,10 +3,12 @@ import { useStore, APPS } from './store';
 import { useAppRegistry, loadWpmComponent } from './store/appRegistry';
 import TerminalApp from './components/Apps/Terminal';
 import FileViewer from './components/Apps/FileViewer';
+import DBViewerApp from './components/Apps/DBViewer/DBViewerApp';
 
-const APP_COMP: Record<string, React.FC<{ winId: string }>> = {
+const APP_COMP: Record<string, React.FC<any>> = {
   terminal: TerminalApp,
   files: FileViewer,
+  'db-viewer': DBViewerApp as any,
 };
 
 function WpmWrapper({ entry, baseUrl, winId }: { entry: string; baseUrl: string; winId: string }) {
@@ -88,7 +90,7 @@ export default function App() {
           const installedMap = Object.fromEntries(installed.map((a: any) => [a.id, a]));
           const isWpm = !!installedMap[w.appId];
           const wpmEntry = isWpm ? (installedMap[w.appId] as any).entry : null;
-          const wpmBase = isWpm ? ((installedMap[w.appId] as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8080/catalog.json') : null;
+          const wpmBase = isWpm ? ((installedMap[w.appId] as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8081/catalog.json') : null;
           const Comp = APP_COMP[w.appId] as any;
           if (w.minimized) return null;
           if (isWpm) {

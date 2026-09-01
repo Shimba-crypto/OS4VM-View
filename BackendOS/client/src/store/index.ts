@@ -11,6 +11,7 @@ const defaultApps: AppDefinition[] = [
   { id: 'calculator', name: 'Calculator', icon: '🔢', defaultWidth: 300, defaultHeight: 420, minWidth: 280, minHeight: 400, resizable: false, component: 'Calculator' },
   { id: 'app-store', name: 'App Store', icon: '🏪', defaultWidth: 700, defaultHeight: 500, component: 'AppStore' },
   { id: 'browser', name: 'Browser', icon: '🌐', defaultWidth: 900, defaultHeight: 600, minWidth: 500, minHeight: 350, component: 'Browser' },
+  { id: 'db-viewer', name: 'DB Viewer', icon: '🗄️', defaultWidth: 700, defaultHeight: 500, minWidth: 500, minHeight: 400, component: 'DBViewer' },
 ];
 
 interface WindowStore {

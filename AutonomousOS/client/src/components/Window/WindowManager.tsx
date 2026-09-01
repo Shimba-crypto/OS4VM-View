@@ -8,6 +8,7 @@ import NotepadApp from '../Apps/Notepad/NotepadApp';
 import MonitorApp from '../Apps/Monitor/MonitorApp';
 import AgentConsole from '../Apps/Monitor/AgentConsole';
 import SettingsApp from '../Apps/Settings/SettingsApp';
+import DBViewerApp from '../Apps/DBViewer/DBViewerApp';
 
 const comps: Record<string, React.ComponentType<{ windowId: string }>> = {
   Terminal: TerminalApp,
@@ -16,6 +17,7 @@ const comps: Record<string, React.ComponentType<{ windowId: string }>> = {
   Monitor: MonitorApp,
   AgentConsole: AgentConsole,
   Settings: SettingsApp,
+  DBViewer: DBViewerApp,
 };
 
 function WpmWrapper({ entry, baseUrl, windowId }: { entry: string; baseUrl: string; windowId: string }) {
@@ -42,7 +44,7 @@ export default function WindowManager() {
         const isWpm = app?.component?.startsWith('wpm:');
         if (isWpm) {
           const entry = (app as any).entry;
-          const base = (app as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8080/catalog.json';
+          const base = (app as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8081/catalog.json';
           return <Window key={w.id} window={w}><WpmWrapper entry={entry} baseUrl={base} windowId={w.id} /></Window>;
         }
         const C = app ? comps[app.component] : null;

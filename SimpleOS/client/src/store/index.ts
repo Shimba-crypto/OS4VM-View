@@ -8,6 +8,7 @@ const defaultApps: AppDefinition[] = [
   { id: 'text-editor', name: 'Text Editor', icon: '📝', desktopIcon: '📝', defaultWidth: 650, defaultHeight: 450, minWidth: 350, minHeight: 250, component: 'TextEditor' },
   { id: 'calculator', name: 'Calculator', icon: '🔢', desktopIcon: '🔢', defaultWidth: 260, defaultHeight: 370, minWidth: 240, minHeight: 350, component: 'Calculator' },
   { id: 'system-info', name: 'System Info', icon: '📊', desktopIcon: '📊', defaultWidth: 420, defaultHeight: 380, component: 'SystemInfo' },
+  { id: 'db-viewer', name: 'DB Viewer', icon: '🗄️', desktopIcon: '🗄️', defaultWidth: 700, defaultHeight: 480, minWidth: 500, minHeight: 350, component: 'DBViewer' },
 ];
 
 interface WindowStore {

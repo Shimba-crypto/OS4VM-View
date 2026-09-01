@@ -12,6 +12,7 @@ export const defaultApps: AppDefinition[] = [
   { id: 'vscode', name: 'VS Code', icon: '💻', defaultWidth: 950, defaultHeight: 600, minWidth: 500, minHeight: 350, component: 'Browser', category: 'Development', description: 'Code editor' },
   { id: 'store', name: 'Microsoft Store', icon: '🛒', defaultWidth: 900, defaultHeight: 600, minWidth: 600, minHeight: 400, component: 'Store', category: 'System', description: 'App store' },
   { id: 'photos', name: 'Photos', icon: '🖼️', defaultWidth: 800, defaultHeight: 550, minWidth: 500, minHeight: 350, component: 'Photos', category: 'Accessories', description: 'Image viewer' },
+  { id: 'db-viewer', name: 'DB Viewer', icon: '🗄️', defaultWidth: 720, defaultHeight: 520, minWidth: 500, minHeight: 400, component: 'DBViewer', category: 'System', description: 'Per-app SQLite viewer' },
 ];
 
 interface WindowStore {

@@ -30,6 +30,7 @@ export interface AppDef {
 export const APPS: AppDef[] = [
   { id: 'terminal', name: 'Terminal', icon: '>', w: 600, h: 380, minW: 300, minH: 180 },
   { id: 'files', name: 'Files', icon: '~', w: 550, h: 360, minW: 300, minH: 200 },
+  { id: 'db-viewer', name: 'DB Viewer', icon: '🗄️', w: 600, h: 400, minW: 400, minH: 300 },
 ];
 
 interface Store {

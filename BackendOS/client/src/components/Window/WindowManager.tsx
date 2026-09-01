@@ -9,6 +9,7 @@ import SettingsApp from '../Apps/Settings/SettingsApp';
 import SystemMonitorApp from '../Apps/SystemMonitor/SystemMonitorApp';
 import CalculatorApp from '../Apps/Calculator/CalculatorApp';
 import AppStoreApp from '../Apps/AppStore/AppStoreApp';
+import DBViewerApp from '../Apps/DBViewer/DBViewerApp';
 import BrowserApp from '../Apps/Browser/BrowserApp';
 
 const appComponents: Record<string, React.ComponentType<{ windowId: string }>> = {
@@ -20,6 +21,7 @@ const appComponents: Record<string, React.ComponentType<{ windowId: string }>> =
   Calculator: CalculatorApp,
   AppStore: AppStoreApp,
   Browser: BrowserApp,
+  DBViewer: DBViewerApp,
 };
 
 function WpmWrapper({ entry, baseUrl, windowId }: { entry: string; baseUrl: string; windowId: string }) {
@@ -46,7 +48,7 @@ export default function WindowManager() {
         const appDef = allApps.find((a) => a.id === win.appId);
         const isWpm = appDef?.component?.startsWith('wpm:');
         const wpmEntry = isWpm ? (appDef as any).entry : null;
-        const wpmBase = isWpm ? ((appDef as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8080/catalog.json') : null;
+        const wpmBase = isWpm ? ((appDef as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8081/catalog.json') : null;
         const AppComponent = appDef ? (isWpm ? null : appComponents[appDef.component]) : null;
 
         return (

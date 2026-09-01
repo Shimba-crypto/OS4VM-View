@@ -10,6 +10,7 @@ import BrowserApp from '../Apps/Browser/BrowserApp';
 import SettingsApp from '../Apps/Settings/SettingsApp';
 import StoreApp from '../Apps/Settings/StoreApp';
 import PhotosApp from '../Apps/Settings/PhotosApp';
+import DBViewerApp from '../Apps/DBViewer/DBViewerApp';
 
 const appComponents: Record<string, React.ComponentType<{ windowId: string }>> = {
   FileExplorer: FileExplorerApp,
@@ -20,6 +21,7 @@ const appComponents: Record<string, React.ComponentType<{ windowId: string }>> =
   Settings: SettingsApp,
   Store: StoreApp,
   Photos: PhotosApp,
+  DBViewer: DBViewerApp,
 };
 
 function WpmWrapper({ entry, baseUrl, windowId }: { entry: string; baseUrl: string; windowId: string }) {
@@ -45,7 +47,7 @@ export default function WindowManager() {
         const appDef = allApps.find((a) => a.id === win.appId);
         const isWpm = appDef?.component?.startsWith('wpm:');
         const wpmEntry = isWpm ? (appDef as any).entry : null;
-        const wpmBase = isWpm ? ((appDef as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8080/catalog.json') : null;
+        const wpmBase = isWpm ? ((appDef as any)._catalogBase || localStorage.getItem('wpm_catalog_base') || 'http://localhost:8081/catalog.json') : null;
         const AppComponent = appDef ? (isWpm ? null : appComponents[appDef.component]) : null;
         return (
           <Window key={win.id} window={win}>

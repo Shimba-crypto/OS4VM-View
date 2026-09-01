@@ -1,0 +1,7 @@
+{
+  "buildCommand": "bash WebXOsLuncher/assemble-site.sh _site",
+  "outputDirectory": "_site",
+  "installCommand": "npm install --prefix WebXOsLuncher && npm install --prefix BackendOS/client && npm install --prefix Bindows/client && npm install --prefix AutonomousOS/client && npm install --prefix SimpleOS/client && npm install --prefix NanoOS/client",
+  "framework": null,
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
