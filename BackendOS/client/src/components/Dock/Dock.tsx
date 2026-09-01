@@ -7,7 +7,7 @@ export default function Dock() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const installed = useAppRegistry((s) => s.installed);
-  const dockApps = [...defaultApps, ...installed].slice(0, 9);
+  const dockApps = [...defaultApps, ...installed].slice(0, 15);
 
   function handleAppClick(appId: string) {
     const existing = windows.find((w) => w.appId === appId);
@@ -34,7 +34,7 @@ export default function Dock() {
   return (
     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-[9998]">
       <div
-        className="flex items-end gap-1 px-3 py-1.5 rounded-2xl"
+        className="flex items-end gap-1 px-3 py-1.5 rounded-2xl overflow-x-auto max-w-[90vw]"
         style={{
           background: 'rgba(30, 30, 46, 0.65)',
           backdropFilter: 'blur(20px)',

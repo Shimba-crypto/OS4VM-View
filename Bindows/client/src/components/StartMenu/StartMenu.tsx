@@ -9,7 +9,7 @@ export default function StartMenu() {
   const [query, setQuery] = useState('');
 
   const installed = useAppRegistry((s) => s.installed);
-  const pinned = [...defaultApps, ...installed].slice(0, 12);
+  const pinned = [...defaultApps, ...installed].slice(0, 20);
   const recommended = [
     { name: 'Getting Started', sub: 'Recently added', icon: '👋' },
     { name: 'Bindows Tips', sub: 'Recently added', icon: '💡' },
