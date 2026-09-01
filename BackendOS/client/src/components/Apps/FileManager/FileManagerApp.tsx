@@ -31,13 +31,15 @@ export default function FileManagerApp({ windowId }: FileManagerAppProps) {
     loadTree();
   }, []);
 
+  const DEMO_TREE = [{ name: 'Documents', path: 'home/user/Documents', type: 'directory', size: 0, modified: '' } as any, { name: 'Projects', path: 'home/user/Projects', type: 'directory', size: 0, modified: '' } as any, { name: 'README.md', path: 'home/user/README.md', type: 'file', size: 120, modified: '' } as any];
   async function loadTree() {
     setLoading(true);
     try {
       const files = await api.getFiles('home/user');
       setTree(files);
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      if (String(err.message || err).includes('No backend')) setTree(DEMO_TREE);
+      else console.error(err);
     } finally {
       setLoading(false);
     }

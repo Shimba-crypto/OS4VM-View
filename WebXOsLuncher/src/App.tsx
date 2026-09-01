@@ -51,26 +51,41 @@ export default function App() {
   useEffect(() => { localStorage.setItem('wx_env', envMode); }, [envMode]);
   useEffect(() => { localStorage.setItem('wx_mode', mode); }, [mode]);
 
-  // Health check for local dev servers
+  // Health check — localhost dev + prod (GitHub Pages / Vercel)
   useEffect(() => {
     let cancelled = false;
+    async function checkOne(url: string): Promise<boolean> {
+      try {
+        const c = new AbortController();
+        setTimeout(() => c.abort(), 1500);
+        const r = await fetch(url, { method: 'HEAD', signal: c.signal, cache: 'no-store' });
+        if (r.ok || r.status === 200) return true;
+      } catch {}
+      try {
+        await fetch(url, { mode: 'no-cors', cache: 'no-store' } as any);
+        return true;
+      } catch { return false; }
+    }
     async function check() {
       const next: Health = {};
+      const isVercel = window.location.hostname.includes('vercel.app');
+      const isGhPages = window.location.hostname.includes('github.io');
       await Promise.all(OSES.map(async (os) => {
         next[os.id] = 'checking';
         if (!cancelled) setHealth({ ...next });
-        try {
-          const c = new AbortController();
-          setTimeout(() => c.abort(), 1200);
-          const r = await fetch(os.localPath, { method: 'HEAD', signal: c.signal, cache: 'no-store' });
-          next[os.id] = r.ok || r.status === 200 || r.type === 'opaque' ? 'online' : 'offline';
-        } catch {
-          // Try no-cors fetch as fallback (vite returns html)
-          try {
-            await fetch(os.localPath, { mode: 'no-cors', cache: 'no-store' } as any);
-            next[os.id] = 'online';
-          } catch { next[os.id] = 'offline'; }
+        const prodUrl = isVercel
+          ? `${GH_PAGES_BASE}/${os.basePath}`
+          : isGhPages
+          ? `./${os.basePath}`
+          : `${GH_PAGES_BASE}/${os.basePath}`;
+        // Try local first when on localhost, else prod first
+        const isLocal = window.location.hostname === 'localhost';
+        const urls = isLocal ? [os.localPath, prodUrl] : [prodUrl, os.localPath];
+        for (const u of urls) {
+          if (await checkOne(u)) { next[os.id] = 'online'; if (!cancelled) setHealth({ ...next }); return; }
         }
+        next[os.id] = 'offline';
+        if (!cancelled) setHealth({ ...next });
       }));
       if (!cancelled) setHealth(next);
     }
@@ -111,7 +126,7 @@ export default function App() {
     setWpmErr(null);
     const custom = (() => { try { return localStorage.getItem('wpm_catalog_url'); } catch { return null; } })();
     const port = (() => { try { return localStorage.getItem('wpm_port'); } catch { return null; } })();
-    const urls = custom ? [custom, 'https://raw.githubusercontent.com/Shimba-crypto/wpm/main/catalog.json'] : port ? [`http://localhost:${port}/catalog.json`, 'https://raw.githubusercontent.com/Shimba-crypto/wpm/main/catalog.json'] : ['http://localhost:8081/catalog.json', 'http://localhost:8080/catalog.json', 'https://raw.githubusercontent.com/Shimba-crypto/wpm/main/catalog.json'];
+    const urls = custom ? [custom, 'https://cdn.jsdelivr.net/gh/Shimba-crypto/wpm@main/catalog.json'] : port ? [`http://localhost:${port}/catalog.json`, 'https://cdn.jsdelivr.net/gh/Shimba-crypto/wpm@main/catalog.json'] : ['http://localhost:8081/catalog.json', 'http://localhost:8080/catalog.json', 'https://cdn.jsdelivr.net/gh/Shimba-crypto/wpm@main/catalog.json', 'https://raw.githubusercontent.com/Shimba-crypto/wpm/main/catalog.json'];
     (async () => {
       for (const u of urls) {
         try {

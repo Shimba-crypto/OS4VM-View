@@ -18,6 +18,7 @@ function getLocalCatalogs(): string[] {
 }
 const LOCAL_CATALOGS = getLocalCatalogs();
 const PROD_CATALOGS = [
+  'https://cdn.jsdelivr.net/gh/Shimba-crypto/wpm@main/catalog.json',
   'https://raw.githubusercontent.com/Shimba-crypto/wpm/main/catalog.json',
   './repo/catalog.json',
   '/repo/catalog.json',
@@ -99,7 +100,11 @@ export async function wpmInstall(id: string, term: any): Promise<void> {
     term.writeln(`  fetching ${id}@${app.version}...`);
     // Verify compatible - allow * or current os id (we don't have os id here, so allow all for now)
     // Preload component to verify entry reachable
-    const entryUrl = new URL(app.entry, baseUrl).toString();
+    let entryUrl = new URL(app.entry, baseUrl).toString();
+    // raw.githubusercontent.com blocks ESM import (wrong MIME/CORS) — use jsDelivr for .js
+    if (entryUrl.includes('raw.githubusercontent.com/Shimba-crypto/wpm')) {
+      entryUrl = entryUrl.replace('https://raw.githubusercontent.com/Shimba-crypto/wpm/main/', 'https://cdn.jsdelivr.net/gh/Shimba-crypto/wpm@main/');
+    }
     try {
       const r = await fetch(entryUrl, { method: 'HEAD' });
       if (!r.ok) throw new Error(`${r.status}`);

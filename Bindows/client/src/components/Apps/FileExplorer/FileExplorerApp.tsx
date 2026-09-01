@@ -30,15 +30,33 @@ export default function FileExplorerApp({ windowId: _ }: { windowId: string }) {
 
   useEffect(() => { load(path); }, [path]);
 
+    const DEMO_FILES: FileItem[] = [
+    { name: 'Documents', type: 'directory' },
+    { name: 'Projects', type: 'directory' },
+    { name: 'README.md', type: 'file', size: 2 },
+    { name: 'notes.txt', type: 'file', size: 1 },
+  ];
+
   async function load(p: string) {
     setLoading(true); setError(null);
     try {
       const data = await api.getFiles(p);
       const list: FileItem[] = Array.isArray(data) ? data : data.files || [];
       setFiles(list);
+      if (list.length === 0 && p === 'home/user') {
+        // Show demo hint when empty but backend is online
+        setError(null);
+      }
     } catch (e: any) {
-      setError(e.message || 'Failed to load');
-      setFiles([]);
+      const msg = e.message || 'Failed to load';
+      if (msg.includes('No backend')) {
+        // Demo mode — show mock files instead of error
+        setFiles(DEMO_FILES);
+        setError(null);
+      } else {
+        setError(msg);
+        setFiles([]);
+      }
     } finally { setLoading(false); }
   }
 
